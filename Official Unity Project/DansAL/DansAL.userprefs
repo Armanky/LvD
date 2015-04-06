@@ -1,17 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\CollectibleController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\RoomController.cs">
     <Files>
-      <File FileName="Assets\Scripts\Controllers\RoomController.cs" Line="152" Column="24" />
-      <File FileName="Assets\Scripts\Classes\Room.cs" Line="20" Column="36" />
-      <File FileName="Assets\Scripts\Classes\DialogueLoader.cs" Line="15" Column="2" />
-      <File FileName="Assets\Scripts\rayCaster.cs" Line="61" Column="79" />
-      <File FileName="Assets\Scripts\Classes\Door.cs" Line="14" Column="3" />
-      <File FileName="Assets\Scripts\SpawnManager.cs" Line="35" Column="28" />
-      <File FileName="Assets\Scripts\Classes\Collectible.cs" Line="16" Column="3" />
-      <File FileName="Assets\Scripts\Controllers\RadioController.cs" Line="109" Column="46" />
-      <File FileName="Assets\Scripts\Controllers\CollectibleController.cs" Line="33" Column="6" />
-      <File FileName="Assets\Scripts\Classes\EventReceiver.cs" Line="35" Column="32" />
+      <File FileName="Assets\Scripts\ghostAI.cs" Line="346" Column="28" />
+      <File FileName="..\..\..\..\Village\Game\Village\Assets\Standard Assets\Characters\FirstPersonCharacter\Scripts\RigidbodyFirstPersonController.cs" Line="24" Column="24" />
+      <File FileName="Assets\Scripts\Classes\EventReceiver.cs" Line="61" Column="39" />
+      <File FileName="Assets\Scripts\rayCaster.cs" Line="68" Column="5" />
+      <File FileName="Assets\Scripts\Controllers\RoomController.cs" Line="142" Column="94" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -20,6 +20,7 @@ public class CollectibleController : EventReceiver {
 		missionIndices = new int[5][];
 
 		//Generate an item database based on our list
+		//https://docs.google.com/spreadsheets/d/1r2QRdUrdkswYt4-aMFmbOhygtG6-MSGl0pyw4tLXRGM/edit#gid=0
 
 		//SNACKS
 		missionIndices[0] = new int[]{
@@ -34,6 +35,7 @@ public class CollectibleController : EventReceiver {
 			3,
 			4,
 			5,
+			6,
 			1,
 			7
 		};
@@ -86,7 +88,7 @@ public class CollectibleController : EventReceiver {
 		//TODO: Generate at least twenty items
 		int curr;
 		for (int i = 0; i < 5; ++i){
-			rand = Random.Range(0, missionIndices[mission].Length - 1);
+			rand = Random.Range(0, missionIndices[mission].Length);
 			curr = missionIndices[mission][rand];
 
 			if (!db[curr])

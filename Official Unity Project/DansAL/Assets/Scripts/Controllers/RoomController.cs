@@ -25,15 +25,6 @@ public class RoomController : EventReceiver  {
 	void Update () {
 
 
-		if (Input.GetKeyDown (KeyCode.Alpha0))
-			darkenRoom (0);
-
-		if (Input.GetKeyDown (KeyCode.Alpha1))
-			darkenRoom (1);
-
-		if (Input.GetKeyDown (KeyCode.Alpha2))
-			darkenRoom (2);
-
 		if (Input.GetKeyDown (KeyCode.Q))
 			ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y)=>x.onQuotaMet());
 
@@ -134,12 +125,34 @@ public class RoomController : EventReceiver  {
 
 	}
 
+	void setRoomLighting(){
+
+		//Check the state of the current room and switch the lighting if necessary
+		GameObject flashlight = GameObject.FindGameObjectWithTag ("MainCamera").transform.FindChild ("Flashlight").gameObject;
+
+		if (rooms [playerRoom].dark) {
+			//Make the room dark!
+			GameObject[] lights = GameObject.FindGameObjectsWithTag ("roomLight");
+			Light l;
+			for (int i = 0; i < lights.Length; ++i)
+				lights [i].SetActive (false);
+
+			flashlight.SetActive (true);
+
+			ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y)=>x.onEnterDarkRoom());
+		} else {
+			flashlight.SetActive (false);
+			ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y)=>x.onEnterLightRoom());
+		}
+	}
+
 
 	//Event handlers
 
 	public override void onRoomWentDark(int r){
 
 		Debug.Log ("Room " + r + " went dark!");
+		setRoomLighting ();
 
 	}
 
@@ -155,6 +168,16 @@ public class RoomController : EventReceiver  {
 
 
 	}
+
+	public override void sendPower(int r){
+		toggleRoomState (r);
+	}
+	
+
+	void OnLevelWasLoaded(){
+		setRoomLighting ();
+	}
+
 
 
 }

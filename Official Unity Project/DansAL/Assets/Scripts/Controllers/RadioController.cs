@@ -73,6 +73,8 @@ public class RadioController : EventReceiver {
 
 		staticChannel.update ();
 
+		blackoutChannel.update ();
+
 	}
 
 
@@ -274,6 +276,10 @@ public class RadioController : EventReceiver {
 		staticChannel.src.loop = true;
 		staticChannel.Play ();
 
+		radarChannel.setActive (false);
+
+		blackoutChannel.setTargetVolume (0, 0.5f);
+		blackoutChannel.setActive (false);
 
 	}
 
@@ -291,6 +297,11 @@ public class RadioController : EventReceiver {
 		staticChannel.Play ();
 
 		ghostMusicChannel.setTargetVolume (0.0f, 0.05f);
+
+		radarChannel.setActive (true);
+
+		blackoutChannel.setTargetVolume (0.55f, 0.5f);
+		blackoutChannel.setActive (true);
 	}
 
 	public override void onAdjacentToGhost(){
