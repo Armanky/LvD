@@ -23,8 +23,7 @@ public interface IMessageTarget : IEventSystemHandler
 
 	void onDoorClick(int r, Vector3 pos, Vector3 rot);
 	void onItemClick (int id, int value);
-
-	void sendPower (int r);
+	
 
 
 
@@ -58,6 +57,6 @@ public class EventReceiver : MonoBehaviour, IMessageTarget {
 	public virtual void onDoorClick(int r, Vector3 pos, Vector3 rot){}	//Player has clicked on a door
 	public virtual void onItemClick(int id, int value){}					//Player has clicked on an item
 
-	public virtual void sendPower(int r);
+
 
 }

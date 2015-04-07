@@ -169,10 +169,7 @@ public class RoomController : EventReceiver  {
 
 	}
 
-	public override void sendPower(int r){
-		toggleRoomState (r);
-	}
-	
+
 
 	void OnLevelWasLoaded(){
 		setRoomLighting ();
