@@ -27,10 +27,6 @@ public class ghostAI : EventReceiver {
     //roomSelected roomSelectedOther;
 
     RoomController roomsControllerOther;
-    //gameOverScript gameOverScriptOther;
-
-    GameObject gameOverObject;
-
 	int[,] roomMatrix = new int[17,17];
 
     /*GameObject cube1;
@@ -68,9 +64,6 @@ public class ghostAI : EventReceiver {
 
 		//roomSelectedOther = GetComponent<roomSelected>();
         roomsControllerOther = GetComponent<RoomController>();
-
-        gameOverObject = GameObject.Find("gameOver");
-        //gameOverScriptOther = gameOverObject.GetComponent<gameOverScript>();
 
         /*cube1 = GameObject.Find("Cube1");
         cube2 = GameObject.Find("Cube2");
@@ -210,114 +203,100 @@ public class ghostAI : EventReceiver {
         //Debug.Log(tryingToKill);
         if (tryingToKill == false && goofingOff == false)
         {
-            if (playerLight == true)
-            {
-                notChasingTimer += Time.deltaTime;
-
-                Debug.Log("hit light");
-
-                //Debug.Log(notChasingTimer);
-
-                if (notChasingTimer > 5.0)
+                if (playerLight == true)
                 {
+                    notChasingTimer += Time.deltaTime;
 
-                    if (ghostRoomLocation != 13 || ghostRoomLocation != 14 || ghostRoomLocation != 15 || ghostRoomLocation != 16)
+                    //Debug.Log(notChasingTimer);
+
+                    if (notChasingTimer > 5.0)
                     {
-                        do
-                        {                               
-                            randomValue = Random.Range(0, roomsControllerOther.rooms[ghostRoomLocation].connectedRooms.Length);
 
-                            ghostRoomLocation = roomsControllerOther.rooms[ghostRoomLocation].connectedRooms[randomValue];    
-                     
-                        } while (ghostRoomLocation >= 13);
-
-                        ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y) => x.onGHOSTMove(ghostRoomLocation));
-                        notChasingTimer = 0.0f;
-						chasingTimer = 0.0f;
-                    }
-                    else if (ghostRoomLocation == 14 || ghostRoomLocation == 15 || ghostRoomLocation == 16)
-                    {
-                        do
+                        if (ghostRoomLocation != 13 && (ghostRoomLocation == 14 || ghostRoomLocation == 15 || ghostRoomLocation == 16))
                         {
-                            randomValue = Random.Range(0, roomsControllerOther.rooms[ghostRoomLocation].connectedRooms.Length);
+                            do
+                            {                               
+                                randomValue = Random.Range(0, roomsControllerOther.rooms[ghostRoomLocation].connectedRooms.Length);
+
+                                ghostRoomLocation = roomsControllerOther.rooms[ghostRoomLocation].connectedRooms[randomValue];    
+                     
+                            } while (ghostRoomLocation >= 13);
+
+                            ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y) => x.onGHOSTMove(ghostRoomLocation));
+                            notChasingTimer = 0.0f;
+							chasingTimer = 0.0f;
+                        }
+                        else if (ghostRoomLocation == 14 || ghostRoomLocation == 15 || ghostRoomLocation == 16)
+                        {
+                            do
+                            {
+                                randomValue = Random.Range(0, roomsControllerOther.rooms[ghostRoomLocation].connectedRooms.Length);
+
+                                ghostRoomLocation = roomsControllerOther.rooms[ghostRoomLocation].connectedRooms[randomValue];
+
+                            } while (ghostRoomLocation == 13);
+                            ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y) => x.onGHOSTMove(ghostRoomLocation));
+                            chasingTimer = 0.0f;
+                        }
+                        else
+                        {
+                            randomValue = Random.Range(0, 3);
 
                             ghostRoomLocation = roomsControllerOther.rooms[ghostRoomLocation].connectedRooms[randomValue];
+                            notChasingTimer = 0.0F;
+                            chasingTimer = 0.0f;
 
-                        } while (ghostRoomLocation == 13);
-                        ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y) => x.onGHOSTMove(ghostRoomLocation));
-                        chasingTimer = 0.0f;
+                            ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y) => x.onGHOSTMove(ghostRoomLocation));
+                        }
+
+                        //Debug.Log(randomValue);
                     }
-                    else
-                    {
-                        randomValue = Random.Range(0, 3);
-
-                        ghostRoomLocation = roomsControllerOther.rooms[ghostRoomLocation].connectedRooms[randomValue];
-                        notChasingTimer = 0.0F;
-                        chasingTimer = 0.0f;
-
-                        ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y) => x.onGHOSTMove(ghostRoomLocation));
-                    }
-
-                    //Debug.Log(randomValue);
                 }
-            }
-            else
-            {
-                //ghost chasing code going here.
-
-                chasingTimer += Time.deltaTime;
-
-                Debug.Log("hit dark");
-
-                if (chasingTimer > 5.0)
+                else
                 {
-                    ghostRoomLocation = roomMatrix[ghostRoomLocation, playerRoomLocation];
-                    ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y) => x.onGHOSTMove(ghostRoomLocation));
-                    chasingTimer = 0.0f;
-                    notChasingTimer = 0.0f;
-					ghostKill();
+                    //ghost chasing code going here.
+
+                    chasingTimer += Time.deltaTime;
+
+                    if (chasingTimer > 5.0)
+                    {
+                        ghostRoomLocation = roomMatrix[ghostRoomLocation, playerRoomLocation];
+                        ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y) => x.onGHOSTMove(ghostRoomLocation));
+                        chasingTimer = 0.0f;
+                        notChasingTimer = 0.0f;
+						ghostKill();
+                    }
                 }
-            }
-            //cube1.renderer.material.color = Color.green;
-            //timer = 0;
+                //cube1.renderer.material.color = Color.green;
+                //timer = 0;
         }
         else if (goofingOff == true && tryingToKill == false)
         {
             goofingOffTimer += Time.deltaTime;
 
-            Debug.Log("hit goofing spawn");
-
             if (goofingOffTimer > 5.0)
             {
                 ghostRoomLocation = 13;
                 ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y) => x.onGHOSTMove(ghostRoomLocation));
-                goofingOff = false;
-                notChasingTimer = 0.0f;
-                chasingTimer = 0.0f;
+                goofingOff = false;   
             }
         }
         else
         {
             killTimer += Time.deltaTime;
 
-            Debug.Log("hit killing");
-
             if (killTimer > 5.0)
             {
-                //Debug.Log("Dead");
+                Debug.Log("Dead");
                 gameOver = true;
-                ExecuteEvents.Execute<IMessageTarget>(gameOverObject, null, (x, y) => x.Died());
             }
 
             notChasingTimer = 0.0f;
-            chasingTimer = 0.0f;
         }
 
         if ((playerRoomLocation == 13 || playerRoomLocation == 14 || playerRoomLocation == 15 || playerRoomLocation == 16) && tryingToKill == false && goofingOff == false)
         {
             goofingOffTimer += Time.deltaTime;
-
-            Debug.Log("hit goofing off");
 
             if (goofingOffTimer > 5.0)
             {
@@ -392,13 +371,9 @@ public class ghostAI : EventReceiver {
 		ghostKill ();
 	}
 
-    public override void onChangeRoom(int r)
-    {
-        playerRoomLocation = r;
-    }
-
     public bool gotDead()
     {
         return gameOver;
     }
+
 }

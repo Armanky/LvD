@@ -16,29 +16,52 @@ public class RoomController : EventReceiver  {
 	private int blackoutCounter;
 	private int rand;
 
+	private int[,] ghostPathMatrix;
+
+	private GameObject G;
 	// Use this for initialization
 	void Start () {
 		blackoutCounter = blackoutDelay * 60;
+		G = GameObject.FindGameObjectWithTag ("global");
+
+		ghostRoom = 8;
+		playerRoom = 0;
+
+		//Set IDs for all the rooms
+		for (int i = 0; i < rooms.Length; ++i)
+			rooms[i].id = i;
+
+			
+		ghostPathMatrix = new int[,] { 
+			//0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16
+			{-1,  1,  1,  1,  1,  1,  1,  11, 11, 11, 11, 11, 11, 1,  1,  11, 11}, //0
+			{ 0, -1,  2,  3,  2,  3,  2,  2,  2,  0,  0,  0,  0,  14, 14, 0,  3},//1
+			{ 1,  1, -1,  4,  4,  5,  4,  4,  4,  4,  1,  1,  1,  1,  1,  1,  4}, //2
+			{ 1,  1,  1, -1,  4,  4,  4,  4,  4,  4,  1,  1,  1,  1,  1,  1,  4},//3
+			{ 2,  2,  2,  3, -1,  6,  6,  6,  6,  6,  6,  2,  2,  6,  3,  3,  6},//4
+			{ 3,  3,  2,  2,  4, -1,  6,  6,  6,  6,  6,  3,  6,  6,  2,  2,  6},//5
+			{ 4,  4,  4,  4,  2,  5, -1,  7,  8,  7,  7,  8,  8,  7,  4,  7,  7},//6
+			{ 9,  6,  6,  6,  6,  6,  6, -1,  8,  9,  9,  9,  9,  16, 6,  9,  16},//7
+			{ 9,  6,  6,  6,  6,  6,  6,  7, -1,  9,  9,  9,  9,  7,  6,  9,  7},//8
+			{10, 10,  7,  7,  7,  8,  8,  7,  8, -1, 10, 10, 10,  7,  10, 10, 7},//9
+			{11, 11, 11, 11,  9,  9,  9,  9,  9,  9, -1, 11, 12,  11, 11, 11, 9},//10
+			{ 0,  0,  0,  0,  0,  0, 10, 10, 10, 10, 10, -1, 12,  15, 0,  15, 10},//11
+			{11, 11, 11, 11, 11, 11, 10, 10, 10, 10, 10, 11, -1,  11, 1,  11, 10},//12
+			{14, 14, 14, 14, 14, 14, 16, 16, 16, 16, 15, 15, 15,  -1, 14, 15, 16},//13
+			{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  13, -1, 13, 13},//14
+			{11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,  13, 13, -1, 13},//15
+			{14, 14, 14, 14, 14, 14, 16, 16, 16, 16, 15, 15, 15,  13, 13, 13, -1},};//16
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
 
-		if (Input.GetKeyDown (KeyCode.Alpha0))
-			darkenRoom (0);
-
-		if (Input.GetKeyDown (KeyCode.Alpha1))
-			darkenRoom (1);
-
-		if (Input.GetKeyDown (KeyCode.Alpha2))
-			darkenRoom (2);
-
-		if (Input.GetKeyDown (KeyCode.Q))
-			ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y)=>x.onQuotaMet());
-
-		if (Input.GetKeyDown (KeyCode.K))
-			ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y)=>x.onEnterDarkRoom());
+		if (Input.GetKeyDown (KeyCode.K)) {
+			//ExecuteEvents.Execute<IMessageTarget> (this.gameObject, null, (x, y) => x.onEnterDarkRoom ());
+			G.BroadcastMessage ("onEnterDarkRoom");
+		}
 
 		if (Input.GetKeyDown (KeyCode.L))
 			ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y)=>x.onEnterLightRoom());
@@ -84,8 +107,8 @@ public class RoomController : EventReceiver  {
 	void darkenRoom(int r){
 
 		rooms [r].turnOffLight ();
-		ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y)=>x.onRoomWentDark(r));
-
+		//ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y)=>x.onRoomWentDark(r));
+		G.BroadcastMessage ("onRoomWentDark", rooms [r], SendMessageOptions.DontRequireReceiver);
 
 	}
 
@@ -134,27 +157,117 @@ public class RoomController : EventReceiver  {
 
 	}
 
+	void setRoomLighting(){
+
+		//Check the state of the current room and switch the lighting if necessary
+		GameObject flashlight = GameObject.FindGameObjectWithTag ("MainCamera").transform.FindChild ("Flashlight").gameObject;
+
+		if (!isPlayerInGhostRoom ()) {
+			if (rooms [playerRoom].dark) {
+				//Make the room dark!
+				GameObject[] lights = GameObject.FindGameObjectsWithTag ("roomLight");
+				Light l;
+				for (int i = 0; i < lights.Length; ++i)
+					lights [i].SetActive (false);
+
+				flashlight.SetActive (true);
+
+				//ExecuteEvents.Execute<IMessageTarget>(G, null, (x, y)=>x.onEnterDarkRoom());
+				G.BroadcastMessage ("onEnterDarkRoom");
+			} else {
+				flashlight.SetActive (false);
+				//ExecuteEvents.Execute<IMessageTarget>(G, null, (x, y)=>x.onEnterLightRoom());
+				G.BroadcastMessage ("onEnterLightRoom");
+			}
+		} else {
+			//Player is in GHOST room
+			GameObject[] lights = GameObject.FindGameObjectsWithTag ("roomLight");
+			Light l;
+			for (int i = 0; i < lights.Length; ++i)
+				lights [i].SetActive (false);
+
+			flashlight.SetActive (false);
+		}
+	}
+
 
 	//Event handlers
 
-	public override void onRoomWentDark(int r){
 
-		Debug.Log ("Room " + r + " went dark!");
+	void onRoomWentDark(Room r){
+		Debug.Log (r.name + " went dark!");
+		setRoomLighting ();
+	}
+	
+	void onDoorClick(Door d){
+
+		playerRoom = d.to;
+		Application.LoadLevel (rooms[d.to].scene);
 
 	}
 
-	public override void onDoorClick(int r, Vector3 pos, Vector3 rot){
+	void OnLevelWasLoaded(){
 
-		playerRoom = r;
-		Application.LoadLevel (rooms[r].scene);
-		//TODO: Make a scene transition
-		//Take the player to the next room
-		transform.parent.transform.position = pos;
-		//transform.FindChild ("Main Camera").transform.eulerAngles = rot;
-		ExecuteEvents.Execute<IMessageTarget>(this.gameObject, null, (x, y)=>x.onChangeRoom(r));
+		Debug.Log ("You are in " + rooms [playerRoom].name + " and GHOST is in " + rooms [ghostRoom].name);
+		//ExecuteEvents.Execute<IMessageTarget>(G, null, (x, y)=>x.onChangeRoom(playerRoom, rooms[playerRoom].name));
+		G.BroadcastMessage ("onChangeRoom", rooms [playerRoom], SendMessageOptions.DontRequireReceiver);
 
+		if (isPlayerAdjacentToGhost ()) 
+			G.BroadcastMessage ("onAdjacentToGhost");
+		else
+			G.BroadcastMessage ("onNotAdjacentToGhost");
 
+		if (isPlayerInGhostRoom ()){
+			G.BroadcastMessage ("onGHOSTMet");
+		}
+
+		setRoomLighting ();
 	}
+
+	void onGHOSTIsMoving(){
+		if (!isPlayerInGhostRoom ()) {
+			//Pick a room for the GHOST
+			if (rooms [playerRoom].dark) {
+				//Use the matrix to pick a room
+				ghostRoom = ghostPathMatrix [ghostRoom, playerRoom];
+
+			} else if (!isPlayerInGhostRoom ()) {
+				//Pick a room at random
+				int randomRoom; 
+				int roomSelected = 99;
+				Room curr = rooms [ghostRoom];
+
+				while (roomSelected >= 13) {
+					randomRoom = Random.Range (0, curr.connectedRooms.Length);
+					roomSelected = curr.connectedRooms [randomRoom];
+
+					//If the GHOST is already in the Power Station, he has to move through the tunnels
+					if (ghostRoom == 13)
+						break;
+				}
+
+				ghostRoom = roomSelected;
+
+			}
+
+			//Tell everything else that the GHOST has moved
+			G.BroadcastMessage ("onGHOSTMoved", rooms[ghostRoom], SendMessageOptions.DontRequireReceiver);
+
+			Debug.Log ("GHOST moved to " + rooms [ghostRoom].name);
+
+			//Determine the player's location in relation to the GHOST's
+			if (isPlayerInGhostRoom ()){
+				G.BroadcastMessage ("onGHOSTMet");
+			}
+
+		}
+	
+		if (isPlayerAdjacentToGhost ()) 
+			G.BroadcastMessage ("onAdjacentToGhost");
+		else
+			G.BroadcastMessage ("onNotAdjacentToGhost");
+	}
+
 
 
 }

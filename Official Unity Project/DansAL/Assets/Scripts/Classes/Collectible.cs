@@ -8,11 +8,17 @@ public class Collectible : EventReceiver{
 	//Store the associated object and the mission that contains it
 	public int gid;
 	public int value;
+	public string name;
 
-	public override void onItemClick(int id, int value){
+	private GameObject G;
 
-		if (id == gid)
-			this.gameObject.SetActive (false);
+	void Start(){
+		G = GameObject.FindGameObjectWithTag ("global");
+	}
 
+
+	public void collect(){
+		G.BroadcastMessage ("onItemClick", this, SendMessageOptions.DontRequireReceiver);
+		this.gameObject.SetActive (false);
 	}
 }

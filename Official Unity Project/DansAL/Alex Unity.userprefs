@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\RoomController.cs">
+    <Files>
+      <File FileName="Assets\Scripts\Controllers\GHOSTController.cs" Line="117" Column="19" />
+      <File FileName="Assets\Scripts\Controllers\RoomController.cs" Line="255" Column="85" />
+      <File FileName="Assets\Scripts\Classes\EventReceiver.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controllers\RadioController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ghostAI.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

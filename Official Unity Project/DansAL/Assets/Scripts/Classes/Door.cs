@@ -4,9 +4,8 @@ using UnityEngine.EventSystems;
 
 public class Door : EventReceiver {
 
-	public int toRoom;
-	public Vector3 toPosition;
-	public Vector3 toRotation;
+	public int from;
+	public int to;
 
 	// Use this for initialization
 	void Start () {

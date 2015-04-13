@@ -48,6 +48,8 @@ public class RadioController : EventReceiver {
 	private int radarCounter;
 
 	private int rand;	//Used to hold random numbers
+
+	private GameObject G;
 	
 	// Use this for initialization
 	void Start () {
@@ -62,6 +64,8 @@ public class RadioController : EventReceiver {
 
 		radarRate = 40;
 
+		G = GameObject.FindGameObjectWithTag ("global");
+
 	}
 	
 	// Update is called once per frame
@@ -72,6 +76,8 @@ public class RadioController : EventReceiver {
 		updateDialogue ();
 
 		staticChannel.update ();
+
+		blackoutChannel.update ();
 
 	}
 
@@ -236,7 +242,7 @@ public class RadioController : EventReceiver {
 
 	//Event handlers
 
-	public override void onRoomWentDark(int r){
+	void onRoomWentDark(Room r){
 
 		blackoutChannel.src.time = 0;
 		blackoutChannel.Play ();
@@ -245,7 +251,7 @@ public class RadioController : EventReceiver {
 		rand = Random.Range (0, 2);
 		if (rand == 0 && !edChannel.src.isPlaying) {
 			//Play the clip associated with the room
-			edChannel.src.clip = dialogue.BlackoutClips[r];
+			edChannel.src.clip = dialogue.BlackoutClips[r.id];
 			edChannel.Play ();
 		}
 
@@ -259,7 +265,7 @@ public class RadioController : EventReceiver {
 
 	}
 
-	public override void onEnterDarkRoom(){
+	void onEnterDarkRoom(){
 
 		//Play transition clip
 		ambienceChannel.src.time = 0;
@@ -274,10 +280,17 @@ public class RadioController : EventReceiver {
 		staticChannel.src.loop = true;
 		staticChannel.Play ();
 
+		radarChannel.setActive (false);
+
+		blackoutChannel.setTargetVolume (0, 0.5f);
+		blackoutChannel.setActive (false);
+
+		ghostMovementChannel.setTargetVolume (0, 0.5f);
+		ghostMovementChannel.setActive (false);
 
 	}
 
-	public override void onEnterLightRoom(){
+	void onEnterLightRoom(){
 
 		//ambienceChannel.src.time = 0;
 		//ambienceChannel.Play ();
@@ -290,19 +303,42 @@ public class RadioController : EventReceiver {
 		staticChannel.src.loop = true;
 		staticChannel.Play ();
 
+		radarChannel.setActive (true);
+
+		blackoutChannel.setTargetVolume (0.55f, 0.5f);
+		blackoutChannel.setActive (true);
+
+		ghostMovementChannel.setTargetVolume (0.55f, 0.5f);
+		ghostMovementChannel.setActive (true);
+	}
+
+	void onAdjacentToGhost(){
+		//Turn on GHOST music
+		ghostMusicChannel.setTargetVolume (0.5f, 0.005f);
+		//ghostMusicChannel.Play ();
+	}
+
+	void onNotAdjacentToGhost(){
 		ghostMusicChannel.setTargetVolume (0.0f, 0.05f);
 	}
 
-	public override void onAdjacentToGhost(){
-		//Turn on GHOST music
-		ghostMusicChannel.setTargetVolume (0.5f, 0.005f);
-		ghostMusicChannel.src.loop = true;
-		ghostMusicChannel.Play ();
+	void onGHOSTMet(){
+		Debug.Log ("THE GHOST IS HERE!!!!");
+		staticChannel.setTargetVolume (0.0f, 0.05f);
+
 	}
 
-	public override void onItemClick(int id, int value){
+	void onItemClick(Collectible c){
 		UIChannel.Play ();
+	}
+
+	void onChangeRoom(Room r){
 
 	}
 
+	void onGHOSTMoved(Room r){
+		ghostMovementChannel.src.time = 0;
+		ghostMovementChannel.Play ();
+	}
+	
 }

@@ -1,8 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\Alex Unity\Assets\Scripts\Controllers\RoomController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\RoomController.cs">
     <Files>
-      <File FileName="..\..\..\Alex Unity\Assets\Scripts\Controllers\RoomController.cs" Line="142" Column="29" />
+      <File FileName="Assets\Scripts\Classes\EventReceiver.cs" Line="23" Column="2" />
+      <File FileName="Assets\Scripts\ghostAI.cs" Line="346" Column="28" />
+      <File FileName="Assets\Scripts\rayCaster.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controllers\RoomController.cs" Line="156" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

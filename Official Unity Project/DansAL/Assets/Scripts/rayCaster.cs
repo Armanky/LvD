@@ -16,6 +16,7 @@ public class rayCaster : EventReceiver {
 	private Ray cast;
 
 	private string objTag;
+	private GameObject G;
 
 	void OnGUI(){
 		GUI.Label(new Rect (Screen.width/2f, Screen.height/2f,32,32), currentTexture); 
@@ -28,6 +29,8 @@ public class rayCaster : EventReceiver {
 		cast = new Ray(transform.position, fwd);
 		currentTexture = defaultTexture;
 		Cursor.visible = false;
+
+		G = GameObject.FindGameObjectWithTag ("global");
 
 	}
 	
@@ -58,12 +61,8 @@ public class rayCaster : EventReceiver {
 				if (Input.GetMouseButtonDown (0) || Input.GetKeyDown (KeyCode.F)){
 					//We've clicked a door. Change rooms!
 					GameObject d = hit.collider.gameObject;
-					ExecuteEvents.Execute<IMessageTarget>(transform.parent.gameObject, null, 
-					                                      (x, y)=>x.onDoorClick(
-															d.GetComponent<Door>().toRoom, 
-															d.GetComponent<Door>().toPosition, 
-															d.GetComponent<Door>().toRotation)
-					                                      );
+					G.BroadcastMessage ("onDoorClick", d.GetComponent<Door>(), SendMessageOptions.DontRequireReceiver);
+
 				}
 
 				break;
@@ -78,23 +77,14 @@ public class rayCaster : EventReceiver {
 					GameObject[] roots = GameObject.FindGameObjectsWithTag ("Collectible");
 
 					//Call for all collectible objects
-					for (int i = 0; i < roots.Length; ++i){
+					d.GetComponent<Collectible>().collect ();
+					//for (int i = 0; i < roots.Length; ++i){
+					//	roots[i].BroadcastMessage ("onItemClick", d.GetComponent<Collectible>(), SendMessageOptions.DontRequireReceiver);
 
-						ExecuteEvents.Execute<IMessageTarget>(roots[i], null, 
-						                                      (x, y)=>x.onItemClick(
-							d.GetComponent<Collectible>().gid, 
-							d.GetComponent<Collectible>().value)
-
-						                                      );
 		
-					}
 
-					//Call for game objects
-					ExecuteEvents.Execute<IMessageTarget>(transform.parent.gameObject, null, 
-					                                      (x, y)=>x.onItemClick(
-						d.GetComponent<Collectible>().gid, 
-						d.GetComponent<Collectible>().value)
-					                                      );
+
+
 				}
 
 				break;

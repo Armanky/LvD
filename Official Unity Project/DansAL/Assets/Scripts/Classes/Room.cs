@@ -10,7 +10,9 @@ public class Room {
 	//TODO: Make this private
 	public bool dark;
 
-	public int[] connectedRooms = new int[4];
+	public int[] connectedRooms;
+
+	public int id;
 
 	// Use this for initialization
 	void Start () {
@@ -33,4 +35,6 @@ public class Room {
 	public string getName(){
 		return name;
 	}
+
+
 }

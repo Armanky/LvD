@@ -11,30 +11,37 @@ public class RadioChannel{
 	
 	public float targetPitch = 1;
 	private float pitchDelta = 0.05f;
+
+	private bool active = true;
 	
 	public void update(){
+
+		if (active) {
+
+			int sign = 1;
 		
-		int sign = 1;
-		
-		//Step the volume and pitch closer to the target
-		if (src.volume != targetVolume) {
-			sign = src.volume < targetVolume ? 1 : -1;
+			//Step the volume and pitch closer to the target
+			if (src.volume != targetVolume) {
+				sign = src.volume < targetVolume ? 1 : -1;
 			
-			if (Mathf.Abs (src.volume - targetVolume) < volumeDelta)
-				src.volume = targetVolume;
-			else
-				src.volume += volumeDelta * sign;		
-		}
+				if (Mathf.Abs (src.volume - targetVolume) < volumeDelta)
+					src.volume = targetVolume;
+				else
+					src.volume += volumeDelta * sign;		
+			}
 		
-		if (src.pitch != targetPitch) {
-			sign = src.pitch < targetPitch ? 1 : -1;
+			if (src.pitch != targetPitch) {
+				sign = src.pitch < targetPitch ? 1 : -1;
 			
-			if (Mathf.Abs (src.pitch - targetPitch) < pitchDelta)
-				src.pitch = targetPitch;
-			else
-				src.pitch += pitchDelta * sign;		
+				if (Mathf.Abs (src.pitch - targetPitch) < pitchDelta)
+					src.pitch = targetPitch;
+				else
+					src.pitch += pitchDelta * sign;		
+			}
+
+		} else {
+			src.volume = 0;
 		}
-		
 	}
 	
 	public void Play(){
@@ -57,5 +64,9 @@ public class RadioChannel{
 	public void setTargetPitch(float p, float delta){
 		targetPitch = p;
 		pitchDelta = delta;
+	}
+
+	public void setActive(bool state){
+		active = state;
 	}
 }

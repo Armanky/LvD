@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class PlayerController : EventReceiver {
 
 	public int currentRoom;
+
+	private int prevRoom;
 
 	// Use this for initialization
 	void Start () {
@@ -14,4 +17,23 @@ public class PlayerController : EventReceiver {
 	void Update () {
 	
 	}
+
+	void onDoorClick(Door d){
+		prevRoom = d.from;
+		currentRoom = d.to;
+	}
+
+	void onChangeRoom(Room r){
+
+		//Choose the appropriate positioner object and take its transform
+		GameObject[] p = GameObject.FindGameObjectsWithTag ("chiefPosition");
+		for (int i = 0; i < p.Length; ++i) {
+			if (p[i].GetComponent<ChiefPositioner>().fromRoom == prevRoom){
+				transform.position = p[i].transform.position;
+				transform.rotation = p[i].transform.rotation;
+			}
+		}
+
+	}
+	
 }
