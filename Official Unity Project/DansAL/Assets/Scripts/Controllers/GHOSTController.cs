@@ -15,6 +15,9 @@ public class GHOSTController : MonoBehaviour {
 
 	public float movementChance;
 
+	public float killTime;			//Number of seconds a player can share a room until death
+	private float currentKillTime;
+
 	private int movementSpeed;		//0 == normal, 1 == fast, 2 == frenzy
 	private int[,] pathMatrix = new int[17,17];
 	private Room playerRoom;
@@ -26,11 +29,15 @@ public class GHOSTController : MonoBehaviour {
 	private float currentWaitTime;
 	private float currentChance;
 
+
+
 	private bool isFrenzy;
+	private bool isKilling;
 
 	private int rand;
 
 	private GameObject G;
+	private GameObject roomGhost;
 
 	// Use this for initialization
 	void Start () {
@@ -45,11 +52,14 @@ public class GHOSTController : MonoBehaviour {
 		timeDelta = 0.0f;
 
 		G = GameObject.FindGameObjectWithTag ("global");
+		roomGhost = GameObject.FindGameObjectWithTag ("GHOST");
 
 		isFrenzy = false;
 
 		playerRoom = new Room ();
 		playerRoom.dark = false;
+
+		currentKillTime = 0;
 
 	}
 	
@@ -88,17 +98,39 @@ public class GHOSTController : MonoBehaviour {
 			rand = Random.Range (1, 10000);
 
 			if ((float)rand/10000 <= currentChance){
-				//Move the GHOST
-				G.BroadcastMessage ("onGHOSTIsMoving");
-
-				//Reset move timer
-				timeOfLastMovement = Time.time;
+				move ();
 			}
 		}
 
+		//Update kill state
+		if (isKilling) {
+			currentKillTime = Mathf.Min (killTime, currentKillTime + Time.deltaTime);
+			if (currentKillTime >= killTime){
+				G.BroadcastMessage ("playerDied");
+			}
+		} else {
+			currentKillTime = Mathf.Max (0, currentKillTime - (Time.deltaTime/2));
+		}
+
+		//DEBUG: Move GHOST manually
+		if (Input.GetKeyDown (KeyCode.M)){
+			move ();
+		}
 
 
+	}
 
+	
+	void move(){
+		//Move the GHOST
+		G.BroadcastMessage ("onGHOSTIsMoving");
+			
+		//Reset move timer
+		timeOfLastMovement = Time.time;
+	}
+
+	public float getKillPercentage(){
+		return Mathf.Pow(currentKillTime / killTime, 3.5f);
 	}
 
 	void setSpeed(){
@@ -116,17 +148,40 @@ public class GHOSTController : MonoBehaviour {
 		movementSpeed = 2;
 		isFrenzy = true;
 		timeOfBeginFrenzy = Time.time;
+
+		roomGhost.SetActive (true);
+		roomGhost.GetComponentInChildren<AudioSource> ().Play ();
+
+		isKilling = true;
+
+		//Turn off the radio
+		setRadioSources (false);
 	}
 
 	void onChangeRoom(Room r){
 		playerRoom = r;
 		setSpeed ();
+
+		roomGhost = GameObject.FindGameObjectWithTag ("GHOST");
+		roomGhost.SetActive (false);
+
+		isKilling = false;
+
+		setRadioSources (true);
+
 	}
 
 	void onRoomWentDark(Room r){
 		//Give the player a reprieve if their room goes dark
 		timeOfLastMovement = Time.time;
 	}
+
+	void setRadioSources(bool state){
+		AudioSource[] aud = this.gameObject.GetComponentsInChildren<AudioSource> ();
+		for (int i = 0; i < aud.Length; ++i)
+			aud [i].enabled = state;
+	}
+	
 
 
 }

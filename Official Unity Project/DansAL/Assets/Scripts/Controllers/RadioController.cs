@@ -322,12 +322,6 @@ public class RadioController : EventReceiver {
 		ghostMusicChannel.setTargetVolume (0.0f, 0.05f);
 	}
 
-	void onGHOSTMet(){
-		Debug.Log ("THE GHOST IS HERE!!!!");
-		staticChannel.setTargetVolume (0.0f, 0.05f);
-
-	}
-
 	void onItemClick(Collectible c){
 		UIChannel.Play ();
 	}
