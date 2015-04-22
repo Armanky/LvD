@@ -31,10 +31,19 @@ public class RadioController : EventReceiver {
 	public RadioChannel radarChannel;
 	public RadioChannel UIChannel;
 
-	public DialogueLoader dialogue;
+	private DialogueLoader dialogue;
 
 	public AudioClip lightStatic;
 	public AudioClip darkStatic;
+
+	public AudioClip itemCollect;
+
+	public AudioClip powerOpen;
+	public AudioClip powerClose;
+	public AudioClip powerHighlight;
+	public AudioClip powerSelect;
+	public AudioClip powerDistribute;
+	public AudioClip powerConfirm;
 
 	public int rambleInterval;	//Number of frames that must pass before Ed can ramble again
 	public int rambleChance;	//Probability that Ed will start rambling when he is able to do so (1 in rambleChance odds)
@@ -54,6 +63,8 @@ public class RadioController : EventReceiver {
 	// Use this for initialization
 	void Start () {
 		//Start playing Ed's introduction
+		dialogue = GetComponent<DialogueLoader> ();
+
 		introIndex = 0;
 		edChannel.src.clip = dialogue.IntroClips [introIndex];
 		edChannel.src.Play ();
@@ -65,6 +76,8 @@ public class RadioController : EventReceiver {
 		radarRate = 40;
 
 		G = GameObject.FindGameObjectWithTag ("global");
+
+
 
 	}
 	
@@ -323,6 +336,7 @@ public class RadioController : EventReceiver {
 	}
 
 	void onItemClick(Collectible c){
+		UIChannel.src.clip = itemCollect;
 		UIChannel.Play ();
 	}
 
@@ -333,6 +347,17 @@ public class RadioController : EventReceiver {
 	void onGHOSTMoved(Room r){
 		ghostMovementChannel.src.time = 0;
 		ghostMovementChannel.Play ();
+	}
+
+	void onPowerConsole(){
+		UIChannel.src.clip = powerOpen;
+		UIChannel.Play ();
+
+	}
+
+	void onExitPowerConsole(){
+		UIChannel.src.clip = powerClose;
+		UIChannel.Play ();
 	}
 	
 }

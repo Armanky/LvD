@@ -56,6 +56,7 @@
      <Compile Include="Assets\Scripts\Classes\EventReceiver.cs" />
      <Compile Include="Assets\Scripts\Classes\RadioChannel.cs" />
      <Compile Include="Assets\Scripts\Classes\Room.cs" />
+     <Compile Include="Assets\Scripts\ComponentActivator.cs" />
      <Compile Include="Assets\Scripts\Controllers\CollectibleController.cs" />
      <Compile Include="Assets\Scripts\Controllers\GHOSTController.cs" />
      <Compile Include="Assets\Scripts\Controllers\PlayerController.cs" />
@@ -74,7 +75,6 @@
      <Compile Include="Assets\Scripts\aimDot.cs" />
      <Compile Include="Assets\Scripts\ghostAI.cs" />
      <Compile Include="Assets\Scripts\rayCaster.cs" />
-     <Compile Include="Assets\followPlayer.cs" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ChromaticAberrationShader.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ColorCorrectionSelective.shader" />

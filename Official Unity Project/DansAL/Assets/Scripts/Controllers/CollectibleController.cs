@@ -7,6 +7,7 @@ public class CollectibleController : EventReceiver {
 	public int mission;
 
 	private bool[] db;
+	private bool quotaMet;
 
 	//List of indices associated with each mission
 	private int[][] missionIndices;
@@ -17,6 +18,8 @@ public class CollectibleController : EventReceiver {
 	// Use this for initialization
 	void Start () {
 	
+		quotaMet = false;
+
 		missionIndices = new int[5][];
 
 		//Generate an item database based on our list
@@ -24,8 +27,12 @@ public class CollectibleController : EventReceiver {
 
 		//SNACKS
 		missionIndices[0] = new int[]{
+			0,
 			1,
-			7
+			2,
+			3,
+			4,
+			5
 		};
 
 		//TOOLS
@@ -57,8 +64,10 @@ public class CollectibleController : EventReceiver {
 
 
 		db = new bool[50];
+
 		for (int i = 0; i < db.Length; ++i)
 			db[i] = false;
+
 
 		initializeDatabase ();
 
@@ -86,7 +95,9 @@ public class CollectibleController : EventReceiver {
 		//Based on the mission we're in, choose items from the database to spawn
 		//TODO: Generate at least twenty items
 		int curr;
-		for (int i = 0; i < 5; ++i){
+		for (int i = 0; i < 6; ++i){
+			//TODO: Fix all this!!!
+			/*
 			rand = Random.Range(0, missionIndices[mission].Length);
 			curr = missionIndices[mission][rand];
 
@@ -102,6 +113,9 @@ public class CollectibleController : EventReceiver {
 
 			if (esc)
 				break;
+				*/
+
+			db[i] = true;
 		}
 
 	}
@@ -113,5 +127,15 @@ public class CollectibleController : EventReceiver {
 	void onItemClick(Collectible c){
 		db [c.gid] = false;
 		quotaTotal += c.value;
+
+		if (!quotaMet)
+			checkForVictory ();
+	}
+
+	void checkForVictory(){
+		if (quotaTotal >= 100) {
+			BroadcastMessage ("onQuotaMet");
+			quotaMet = true;
+		}
 	}
 }
