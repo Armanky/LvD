@@ -58,15 +58,15 @@ public class Fade : MonoBehaviour {
 	}
 
     //broadcast method
-	public void transitionIn(bool trans)
+	public void transitionIn()
 	{
-		transitionFadeIn = trans;
+		transitionFadeIn = true;
 	}
 
     //broadcast method
-    public void transitionOut(bool trans2)
+    public void transitionOut()
     {
-        transitionFadeOut = trans2;
+        transitionFadeOut = true;
     }
 
     /*IEnumerator onDoorClick()
