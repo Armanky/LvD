@@ -4,20 +4,21 @@ using UnityEngine.UI;
 
 public class Fade : MonoBehaviour {
 
-	bool transitions;
-    bool transitions2;
+	bool transitionFadeIn;
+    bool transitionFadeOut;
     float fadeSpeed;
 	Color c;
     public Image fadeImage;
 
 	// Use this for initialization
 	void Start () {
+        //how many seconds
         fadeSpeed = 1.0f;
 
 		c = fadeImage.color;
 		//c.a = 0;
-		transitions = true;
-        transitions2 = false;
+		transitionFadeIn = false;
+        transitionFadeOut = false;
 	
 	}
 	
@@ -29,7 +30,7 @@ public class Fade : MonoBehaviour {
         c.a = Mathf.Clamp01(c.a);
         fadeImage.color = c;*/
 
-        if (transitions == true)
+        if (transitionFadeIn == true)
         {
             c.a += fadeSpeed * Time.deltaTime;
             c.a = Mathf.Clamp01(c.a);
@@ -39,11 +40,11 @@ public class Fade : MonoBehaviour {
             if (c.a == 1)
             {
                 //Debug.Log("Hit transition false");
-                transitions = false;
+                transitionFadeIn = false;
             }
         }
 
-        if (transitions2 == true)
+        if (transitionFadeOut == true)
         {
             c.a -= fadeSpeed * Time.deltaTime;
             c.a = Mathf.Clamp01(c.a);
@@ -51,20 +52,20 @@ public class Fade : MonoBehaviour {
             fadeImage.color = c;
 
             if (c.a == 0)
-                transitions2 = false;
+                transitionFadeOut = false;
         }
 	
 	}
 
     //broadcast method
-	void transition(bool trans)
+	public void transitionIn(bool trans)
 	{
-		transitions = trans;
+		transitionFadeIn = trans;
 	}
 
-    //beroadcast method
-    void transition2(bool trans2)
+    //broadcast method
+    public void transitionOut(bool trans2)
     {
-        transitions2 = trans2;
+        transitionFadeOut = trans2;
     }
 }
