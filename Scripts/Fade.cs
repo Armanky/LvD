@@ -68,4 +68,25 @@ public class Fade : MonoBehaviour {
     {
         transitionFadeOut = trans2;
     }
+
+    /*IEnumerator onDoorClick()
+    {
+        
+        //insert your script disabales here 
+          
+
+        //call transitionIn here
+
+        //yield return new WaitForSeconds(1.0f);
+
+        //call loadlevel
+
+        //call transitionOut here
+
+        //yield return new WaitForSeconds(1.0f);
+
+        
+        //re-activate scripts here
+         
+    }*/
 }
