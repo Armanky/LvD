@@ -4,17 +4,17 @@ using System.Collections;
 
 public class gameOverScript : EventReceiver {
 
-    ghostAI ghostAIOther;
+    //public ghostAI ghostAIOther;
 
     public Canvas gameOver;
     public Button Yes;
     public Button No;
 
-    public Camera playerCam;
-    public Camera mainMenuCam;
+    //public Camera playerCam;
+    //public Camera mainMenuCam;
 
-    GameObject dead;
-	GameObject player;
+    //GameObject dead;
+	public GameObject global;
 
     string levelName;
 
@@ -52,51 +52,54 @@ public class gameOverScript : EventReceiver {
         }
 
         //so unity editor doesn't complain
-        mainMenuCam = null;
-        playerCam = null;
+        //mainMenuCam = null;
+        //playerCam = null;
 
-		dead = GameObject.Find("GameController");
-		player = GameObject.Find ("Chief 1");
+		//dead = GameObject.Find("GameController");
+		//player = GameObject.Find ("Chief 1");
 		
-		ghostAIOther = dead.GetComponent<ghostAI>();
+		//ghostAIOther = dead.GetComponent<ghostAI>();
 
-        gameOver = gameOver.GetComponent<Canvas>();
+        //gameOver = gameOver.GetComponent<Canvas>();
 
         //default name
         levelName = "loadTools";
 
-		gameOver.enabled = true;
+		gameOver.enabled = false;
+		Cursor.visible = false;
     }
 
     public void Retry()
     {
-        Destroy(player); 
+        Destroy(global); 
 		Cursor.visible = false;
         Application.LoadLevel(levelName);      
         gameOver.enabled = false;   
     }
 
     public void mainMenu()
-    {
+    {      
+        Destroy(global);
+
+        //mainMenuCam.enabled = true;
+        //playerCam.enabled = false; 
+
+		Destroy (gameObject);
+
         Application.LoadLevel(0);
-        Destroy(player);
-
-        mainMenuCam.enabled = true;
-        playerCam.enabled = false; 
-
-		Destroy (this.gameObject);
     }
 
-    public override void Died()
+    //broadcast method
+    void Died()
     {
         gameOver.enabled = true;
         Cursor.visible = true;
 
-		(player.GetComponent ("FirstPersonController") as MonoBehaviour).enabled = false;
+		(global.GetComponent ("FirstPersonController") as MonoBehaviour).enabled = false;
     }
 
     //broadcast method
-    public void levelNameing(string s)
+    void levelNameing(string s)
     {
         levelName = s;
     }
