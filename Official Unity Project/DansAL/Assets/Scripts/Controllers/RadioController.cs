@@ -359,5 +359,20 @@ public class RadioController : EventReceiver {
 		UIChannel.src.clip = powerClose;
 		UIChannel.Play ();
 	}
-	
+
+	void onPowerConsoleButtonPress(int r){
+		UIChannel.src.clip = powerSelect;
+		UIChannel.Play ();
+	}
+
+	void onPowerConsoleButtonHighlight(int r){
+		UIChannel.src.clip = powerHighlight;
+		UIChannel.Play ();
+	}
+
+	void onSendPower(int r){
+		UIChannel.src.clip = powerDistribute;
+		UIChannel.Play ();
+	}
+
 }

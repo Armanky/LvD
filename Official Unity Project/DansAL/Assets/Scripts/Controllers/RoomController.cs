@@ -199,29 +199,31 @@ public class RoomController : EventReceiver  {
 		setRoomLighting ();
 	}
 	
-	void onDoorClick(Door d){
+	void onFadedOut(int newRoom){
 
-		playerRoom = d.to;
-		Application.LoadLevel (rooms[d.to].scene);
+		playerRoom = newRoom;
+		Application.LoadLevel (rooms[newRoom].scene);
 
 	}
 
 	void OnLevelWasLoaded(){
 
-		Debug.Log ("You are in " + rooms [playerRoom].name + " and GHOST is in " + rooms [ghostRoom].name);
-		//ExecuteEvents.Execute<IMessageTarget>(G, null, (x, y)=>x.onChangeRoom(playerRoom, rooms[playerRoom].name));
-		G.BroadcastMessage ("onChangeRoom", rooms [playerRoom], SendMessageOptions.DontRequireReceiver);
+		if (Application.loadedLevelName.Substring (0, 4) != "load") {
 
-		if (isPlayerAdjacentToGhost ()) 
-			G.BroadcastMessage ("onAdjacentToGhost");
-		else
-			G.BroadcastMessage ("onNotAdjacentToGhost");
+			G.BroadcastMessage ("onChangeRoom", rooms [playerRoom], SendMessageOptions.DontRequireReceiver);
 
-		if (isPlayerInGhostRoom ()){
-			G.BroadcastMessage ("onGHOSTMet");
+			if (isPlayerAdjacentToGhost ()) 
+				G.BroadcastMessage ("onAdjacentToGhost");
+			else
+				G.BroadcastMessage ("onNotAdjacentToGhost");
+
+			if (isPlayerInGhostRoom ()) {
+				G.BroadcastMessage ("onGHOSTMet");
+			}
+
+			setRoomLighting ();
+
 		}
-
-		setRoomLighting ();
 	}
 
 	void onGHOSTIsMoving(){
@@ -272,6 +274,10 @@ public class RoomController : EventReceiver  {
 
 	void playerDied(){
 		Debug.Log ("YOU ARE DEAD");
+	}
+
+	void onSendPower(int r){
+		toggleRoomState (r);
 	}
 
 

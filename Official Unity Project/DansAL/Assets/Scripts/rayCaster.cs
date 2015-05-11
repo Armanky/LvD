@@ -73,7 +73,7 @@ public class rayCaster : EventReceiver {
 						//We've clicked a door. Change rooms!
 						GameObject d = hit.collider.gameObject;
 						G.BroadcastMessage ("onDoorClick", d.GetComponent<Door> (), SendMessageOptions.DontRequireReceiver);
-
+						d.GetComponent<Door>().openDoor();
 					}
 
 					break;

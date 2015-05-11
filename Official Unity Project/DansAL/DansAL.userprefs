@@ -1,9 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\..\..\Desktop\LD32\Assets\Scripts\TimeController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\RoomController.cs">
     <Files>
-      <File FileName="..\..\..\..\..\Desktop\LD32\Assets\Scripts\TimeController.cs" Line="41" Column="77" />
-      <File FileName="..\..\..\..\..\Desktop\LD32\Assets\Scripts\HealthController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Classes\Door.cs" Line="10" Column="24" />
+      <File FileName="Assets\Scripts\ComponentActivator.cs" Line="29" Column="18" />
+      <File FileName="Assets\transformRotator.cs" Line="28" Column="44" />
+      <File FileName="Assets\Scripts\Fader.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\rayCaster.cs" Line="75" Column="41" />
+      <File FileName="Assets\Scripts\Controllers\RoomController.cs" Line="22" Column="32" />
+      <File FileName="Assets\Scripts\TitleScreenEffects.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PowerConsoleButton.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TitleScreenButton.cs" Line="34" Column="40" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
