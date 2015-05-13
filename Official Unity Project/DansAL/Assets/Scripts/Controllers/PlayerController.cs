@@ -28,9 +28,8 @@ public class PlayerController : EventReceiver {
 		//Choose the appropriate positioner object and take its transform
 		GameObject[] p = GameObject.FindGameObjectsWithTag ("chiefPosition");
 		for (int i = 0; i < p.Length; ++i) {
-			if (p[i].GetComponent<ChiefPositioner>().fromRoom == prevRoom){
+			if (p[i].transform.parent.GetComponent<Door>().to == prevRoom){
 				transform.position = p[i].transform.position;
-				transform.rotation = p[i].transform.rotation;
 			}
 		}
 

@@ -14,6 +14,7 @@ public class Door : MonoBehaviour {
 	void Start () {
 		anim = GetComponent<Animator> ();
 		open = Animator.StringToHash ("open");
+	
 	}
 	
 	// Update is called once per frame
